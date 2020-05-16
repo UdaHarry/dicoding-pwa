@@ -1,4 +1,4 @@
-var base_url = "https://readerapi.codepolitan.com/";
+var base_url = "https://api.football-data.org/v2/";
 
 // Blok kode yang akan di panggil jika fetch berhasil
 function status(response) {
@@ -26,24 +26,47 @@ function error(error) {
 // Blok kode untuk melakukan request data json
 function getArticles() {
   if ("caches" in window) {
-    caches.match(base_url + "articles").then(function(response) {
+    caches.match(base_url + "competitions/2021/standings")
+    .then( response => {
       if (response) {
-        response.json().then(function(data) {
-          var articlesHTML = "";
-          data.result.forEach(function(article) {
+        response.json().then( data => {
+          let articlesHTML = "";
+          data.standings.forEach(standings => {
             articlesHTML += `
-                  <div class="card">
-                    <a href="./article.html?id=${article.id}">
-                      <div class="card-image waves-effect waves-block waves-light">
-                        <img src="${article.thumbnail}" />
-                      </div>
-                    </a>
-                    <div class="card-content">
-                      <span class="card-title truncate">${article.title}</span>
-                      <p>${article.description}</p>
-                    </div>
-                  </div>
-                `;
+              <h5>${standings.type}</h5>
+              <table class="highlight">
+                <thead>
+                  <tr>
+                    <th class="center-align">Position</th>
+                    <th colspan="2">Club</th>
+                    <th class="center-align">Play</th>
+                    <th class="center-align">Won</th>
+                    <th class="center-align">Draw</th>
+                    <th class="center-align">lost</th>
+                    <th class="center-align">Points</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `;
+            standings.table.forEach( table =>{
+            articlesHTML+=`
+                <tr>
+                  <td class="center-align">${table.position}</td>
+                  <td>
+                    <img src="${table.team.crestUrl}" alt="${table.team.name}" class="circle responsive-img" style="max-height:24px;" >
+                  </td>
+                  <td>${table.team.name}</td>
+                  <td class="center-align">${table.playedGames}</td>
+                  <td class="center-align">${table.won}</td>
+                  <td class="center-align">${table.draw}</td>
+                  <td class="center-align">${table.lost}</td>
+                  <td class="center-align">${table.points}</td>
+                </tr>`;
+            })
+            articlesHTML+=`
+                </tbody>
+              </table>
+              `;
           });
           // Sisipkan komponen card ke dalam elemen dengan id #content
           document.getElementById("articles").innerHTML = articlesHTML;
@@ -52,33 +75,60 @@ function getArticles() {
     });
   }
 
-  fetch(base_url + "articles")
-    .then(status)
-    .then(json)
-    .then(function(data) {
-      // Objek/array JavaScript dari response.json() masuk lewat data.
+  fetch(base_url + "competitions/2021/standings", {
+    headers: {
+      'X-Auth-Token':'750e305a325b468dae03f086c8916e59'
+    }
+  })
+  .then(status)
+  .then(json)
+  .then( data => {
+    // Objek/array JavaScript dari response.json() masuk lewat data.
 
-      // Menyusun komponen card artikel secara dinamis
-      var articlesHTML = "";
-      data.result.forEach(function(article) {
-        articlesHTML += `
-              <div class="card">
-                <a href="./article.html?id=${article.id}">
-                  <div class="card-image waves-effect waves-block waves-light">
-                    <img src="${article.thumbnail}" />
-                  </div>
-                </a>
-                <div class="card-content">
-                  <span class="card-title truncate">${article.title}</span>
-                  <p>${article.description}</p>
-                </div>
-              </div>
-            `;
-      });
-      // Sisipkan komponen card ke dalam elemen dengan id #content
-      document.getElementById("articles").innerHTML = articlesHTML;
-    })
-    .catch(error);
+    // Menyusun komponen card artikel secara dinamis
+    let articlesHTML = "";
+    data.standings.forEach( standings => {
+      articlesHTML += `
+        <h5>${standings.type}</h5>
+        <table class="highlight">
+          <thead>
+            <tr>
+              <th class="center-align">Position</th>
+              <th colspan="2">Club</th>
+              <th class="center-align">Play</th>
+              <th class="center-align">Won</th>
+              <th class="center-align">Draw</th>
+              <th class="center-align">lost</th>
+              <th class="center-align">Points</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      standings.table.forEach( table =>{
+      articlesHTML+=`
+          <tr>
+            <td class="center-align">${table.position}</td>
+            <td>
+              <img src="${table.team.crestUrl}" alt="${table.team.name}" class="circle responsive-img" style="max-height:24px;" >
+            </td>
+            <td>${table.team.name}</td>
+            <td class="center-align">${table.playedGames}</td>
+            <td class="center-align">${table.won}</td>
+            <td class="center-align">${table.draw}</td>
+            <td class="center-align">${table.lost}</td>
+            <td class="center-align">${table.points}</td>
+          </tr>`;
+      })
+      articlesHTML+=`
+          </tbody>
+        </table>
+        `;
+    });
+    // Sisipkan komponen card ke dalam elemen dengan id #content
+    document.getElementById("articles").innerHTML = articlesHTML;
+  })
+  .catch(error);
+  
 }
 
 function getArticleById() {

@@ -12,8 +12,8 @@ var urlsToCache = [
   "/manifest.json",
   "/js/nav.js",
   "/js/api.js",
-  "js/db.js",
-  "js/idb.js",
+  "/js/db.js",
+  "/js/idb.js",
   "/icon.png"
 ];
 
@@ -26,7 +26,7 @@ self.addEventListener("install", function(event) {
 });
 
 self.addEventListener("fetch", function(event) {
-  var base_url = "https://readerapi.codepolitan.com/";
+  var base_url = "https://api.football-data.org/v2/";
 
   if (event.request.url.indexOf(base_url) > -1) {
     event.respondWith(
