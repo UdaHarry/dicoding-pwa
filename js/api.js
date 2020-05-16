@@ -31,19 +31,26 @@ function getArticles() {
       if (response) {
         response.json().then( data => {
           let articlesHTML = "";
-          data.standings.forEach(standings => {
+          let standings = data.standings[0];
             articlesHTML += `
-              <h5>${standings.type}</h5>
-              <table class="highlight">
+              <div class="col s12 m12">
+              <div class="card">
+              <div class="card-content">
+              
+              
+              <h5 class="center-align">EPL Clasement</h5>
+              <table class="highlight responsive-table">
                 <thead>
                   <tr>
                     <th class="center-align">Position</th>
-                    <th colspan="2">Club</th>
+                    <th >Club</th>
+                    <th class="center-align">Badge</th>
                     <th class="center-align">Play</th>
                     <th class="center-align">Won</th>
                     <th class="center-align">Draw</th>
                     <th class="center-align">lost</th>
                     <th class="center-align">Points</th>
+                    <th class="center-align">club detail</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -52,22 +59,29 @@ function getArticles() {
             articlesHTML+=`
                 <tr>
                   <td class="center-align">${table.position}</td>
-                  <td>
+                  <td>${table.team.name}</td>
+                  <td class="center-align">
                     <img src="${table.team.crestUrl}" alt="${table.team.name}" class="circle responsive-img" style="max-height:24px;" >
                   </td>
-                  <td>${table.team.name}</td>
                   <td class="center-align">${table.playedGames}</td>
                   <td class="center-align">${table.won}</td>
                   <td class="center-align">${table.draw}</td>
                   <td class="center-align">${table.lost}</td>
                   <td class="center-align">${table.points}</td>
+                  <td class="center-align">
+                    <a class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">pageview</i></a>
+                  </td>
                 </tr>`;
             })
             articlesHTML+=`
                 </tbody>
               </table>
+
+              </div>
+              </div>
+              </div>
               `;
-          });
+
           // Sisipkan komponen card ke dalam elemen dengan id #content
           document.getElementById("articles").innerHTML = articlesHTML;
         });
@@ -87,19 +101,26 @@ function getArticles() {
 
     // Menyusun komponen card artikel secara dinamis
     let articlesHTML = "";
-    data.standings.forEach( standings => {
+    let standings = data.standings[0];
       articlesHTML += `
-        <h5>${standings.type}</h5>
-        <table class="highlight">
+        <div class="col s12 m12">
+        <div class="card">
+        <div class="card-content">
+        
+        
+        <h5 class="center-align">EPL Clasement</h5>
+        <table class="highlight responsive-table">
           <thead>
             <tr>
               <th class="center-align">Position</th>
-              <th colspan="2">Club</th>
+              <th >Club</th>
+              <th class="center-align">Badge</th>
               <th class="center-align">Play</th>
               <th class="center-align">Won</th>
               <th class="center-align">Draw</th>
               <th class="center-align">lost</th>
               <th class="center-align">Points</th>
+              <th class="center-align">club detail</th>
             </tr>
           </thead>
           <tbody>
@@ -108,22 +129,29 @@ function getArticles() {
       articlesHTML+=`
           <tr>
             <td class="center-align">${table.position}</td>
-            <td>
+            <td>${table.team.name}</td>
+            <td class="center-align">
               <img src="${table.team.crestUrl}" alt="${table.team.name}" class="circle responsive-img" style="max-height:24px;" >
             </td>
-            <td>${table.team.name}</td>
             <td class="center-align">${table.playedGames}</td>
             <td class="center-align">${table.won}</td>
             <td class="center-align">${table.draw}</td>
             <td class="center-align">${table.lost}</td>
             <td class="center-align">${table.points}</td>
+            <td class="center-align">
+              <a class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">pageview</i></a>
+            </td>
           </tr>`;
       })
       articlesHTML+=`
           </tbody>
         </table>
+
+        </div>
+        </div>
+        </div>
         `;
-    });
+
     // Sisipkan komponen card ke dalam elemen dengan id #content
     document.getElementById("articles").innerHTML = articlesHTML;
   })
