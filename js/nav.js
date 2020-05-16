@@ -1,29 +1,29 @@
 document.addEventListener('DOMContentLoaded', function(){
 
 	// SIDEBAR NAVIGATION
-	var elems = document.querySelectorAll('.sidenav');
+	const elems = document.querySelectorAll('.sidenav');
 	M.Sidenav.init(elems);
 	loadNav();
 
 	function loadNav()
 	{
-		var xhttp = new XMLHttpRequest();
+		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4){
 				if(this.status != 200) return;
 
 				// Muat daftar tautan menu
 				document.querySelectorAll(".topnav, .sidenav")
-				.forEach(function(elm){
+				.forEach( elm =>{
 					elm.innerHTML = xhttp.responseText;
 				});
 
 				// Daftarkan event listener untuk setiap tautan menu
 				document.querySelectorAll('.sidenav a, .topnav a')
-				.forEach(function(elm){
-					elm.addEventListener('click', function(event){
+				.forEach( elm =>{
+					elm.addEventListener('click', event => {
 						// Tutup sidenav
-						var sidenav = document.querySelector('.sidenav');
+						const sidenav = document.querySelector('.sidenav');
 						M.Sidenav.getInstance(sidenav).close();
 						
 						// Muat konten halaman yang dipanggil 
@@ -38,16 +38,16 @@ document.addEventListener('DOMContentLoaded', function(){
 	}
 	
 	// Load page content
-	var page = window.location.hash.substr(1);
+	let page = window.location.hash.substr(1);
 	if(page == '') page = 'home';
 	loadPage(page);
 
 	function loadPage(page)
 	{
-		var xhttp = new XMLHttpRequest();
+		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4){
-				var content = document.querySelector(".body-content");
+				let content = document.querySelector(".body-content");
 				if(this.status == 200) {
 					content.innerHTML = xhttp.responseText;
 				} else if(this.status == 404) {
